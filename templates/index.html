@@ -2,75 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashcam Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashcam Library</title>
     <style>
-        #map { height: 400px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #dddddd;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #8b8b8b;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .file-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .file-container .file {
+            width: 48%;
+            box-sizing: border-box;
+            padding: 10px;
+            background-color: #3d3838;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #ff6600;
+        }
+
+        .file-container .file iframe,
+        .file-container .file video {
+            width: 100%;
+            height: auto;
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <div id="menu">
-        <h1>File Upload</h1>
+    <div class="container">
+        <h1>Dashcam Library</h1>
         
-        <form action="/merge_mp4" method="post">
-            <button type="submit" id="mergeMp4Button">Merge MP4 Files</button>
-        </form>
-
-        <form action="/merge_gpx" method="post">
-            <button type="submit" id="mergeButton">Merge GPX Files</button>
-        </form>
-
-        <script>
-            // Function to handle the click event of the upload button
-            document.getElementById("mergeMp4Button").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent the default form submission
-
-                // Make a POST request to the /merge_mp4 endpoint
-                fetch('/merge_mp4', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({})
-                }).then(response => {
-                    // Optionally handle the response here
-                    console.log('MP4 files will be merged shortly.');
-                }).catch(error => {
-                    // Handle any errors
-                    console.error('Error merging MP4 files:', error);
-                });
-            });
-
-            // Function to handle the click event of the merge GPX button
-            document.getElementById("mergeButton").addEventListener("click", function(event) {
-                event.preventDefault(); // Prevent the default form submission
-
-                // Make a POST request to the /merge_gpx endpoint
-                fetch('/merge_gpx', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({})
-                }).then(response => {
-                    // Optionally handle the response here
-                    console.log('GPX files will be merged shortly.');
-                }).catch(error => {
-                    // Handle any errors
-                    console.error('Error merging GPX files:', error);
-                });
-            });
-        </script>
+        <div class="file-container">
+            {% for pair in file_pairs %}
+                <div class="file">
+                    <iframe src="/static/{{ pair.html }}" width="100%" height="600"></iframe>
+                    <video controls>
+                        <source src="/static/{{ pair.mp4 }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-<div id="videos">
-    {% for video in videos %}
-    <p>Title</p>
-    
-    <video width="620" controls>
-        <source src="{{ url_for('static', filename='videos/' + video) }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    {% endfor %}
-</div>
-<div id="map"></div>
 </body>
 </html>
