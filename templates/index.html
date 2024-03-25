@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashcam Viewer</title>
+    <style>
+        #map { height: 400px; }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <h1>File Upload</h1>
+        
+        <form action="/merge_mp4" method="post">
+            <button type="submit" id="mergeMp4Button">Merge MP4 Files</button>
+        </form>
+
+        <form action="/merge_gpx" method="post">
+            <button type="submit" id="mergeButton">Merge GPX Files</button>
+        </form>
+
+        <script>
+            // Function to handle the click event of the upload button
+            document.getElementById("mergeMp4Button").addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Make a POST request to the /merge_mp4 endpoint
+                fetch('/merge_mp4', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                }).then(response => {
+                    // Optionally handle the response here
+                    console.log('MP4 files will be merged shortly.');
+                }).catch(error => {
+                    // Handle any errors
+                    console.error('Error merging MP4 files:', error);
+                });
+            });
+
+            // Function to handle the click event of the merge GPX button
+            document.getElementById("mergeButton").addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Make a POST request to the /merge_gpx endpoint
+                fetch('/merge_gpx', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                }).then(response => {
+                    // Optionally handle the response here
+                    console.log('GPX files will be merged shortly.');
+                }).catch(error => {
+                    // Handle any errors
+                    console.error('Error merging GPX files:', error);
+                });
+            });
+        </script>
+    </div>
+<div id="videos">
+    {% for video in videos %}
+    <p>Title</p>
+    
+    <video width="620" controls>
+        <source src="{{ url_for('static', filename='videos/' + video) }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    {% endfor %}
+</div>
+<div id="map"></div>
+</body>
+</html>
