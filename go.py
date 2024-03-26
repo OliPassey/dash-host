@@ -1,5 +1,6 @@
 import subprocess
 import schedule
+import threading
 import time
 
 def run_python_files():
@@ -12,15 +13,20 @@ def run_python_files():
         subprocess.run(['python', python_file], check=True)
         print(f"{python_file} executed successfully.")
 
+def run_main():
+    # Run main.py
+    subprocess.run(['python', 'main.py'], check=True)
+
 def main():
-    # Schedule the execution of Python files every hour
-    schedule.every().hour.do(run_python_files)
+    # Schedule the execution of Python files every 15 minutes
+    schedule.every(15).minutes.do(run_python_files)
 
     # Run the Python files immediately
     run_python_files()
 
-    # Run main.py when all Python files are executed
-    subprocess.run(['python', 'main.py'], check=True)
+    # Run main.py in a separate thread
+    main_thread = threading.Thread(target=run_main)
+    main_thread.start()
 
     # Keep the script running to allow schedule to continue working
     while True:
