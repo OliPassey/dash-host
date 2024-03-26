@@ -16,3 +16,11 @@ Its rough around the edges and I want to add more features down the line.
 
 # Screenshots
 ![image](https://github.com/OliPassey/dash-host/assets/7745805/6b0cbe8c-196f-484b-b7e9-3452bb41f3a1)
+
+# Installation
+- Install Python
+- Install ffmpeg
+- (You may need to reboot after installing the above to ensure it's available as an environmen variable)
+- pip install gpxpy folium flask
+- Pull this repo into a new folder c:\dash-host\ for example
+- Run python go.py from a command-line within the application directory
